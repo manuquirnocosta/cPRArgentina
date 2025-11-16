@@ -34,6 +34,26 @@ Example request (`POST /calc_cpra`):
 
 ---
 
+## 🧮 ABO-adjusted cPRA model
+
+The ABO-adjusted calculated Panel Reactive Antibody (cPRA) value is computed according to the methodology proposed by Gragert et al. (Am J Transplant, 2022).  
+This approach integrates both HLA-incompatibility and the probability of ABO-incompatible donors within the donor pool.
+
+The adjusted cPRA is calculated as:
+
+\[
+cPRA_{ABOadj} = cPRA_{HLA} + (1 - cPRA_{HLA}) \times f_{ABO-incompatible}
+\]
+
+where:
+
+- **cPRA<sub>HLA</sub>** is the fraction of donors with one or more unacceptable HLA antigens.  
+- **f<sub>ABO-incompatible</sub>** is the summed phenotype frequency of donors that are ABO-incompatible with the candidate, calculated from the local donor dataset.
+
+This implementation automatically derives ABO phenotype frequencies from the donor CSV file, providing a locally adjusted metric of immunologic compatibility.
+
+---
+
 ## 👨‍💻 About
 
 Developed and maintained by **Manuel Quirno Costa**  
@@ -48,4 +68,11 @@ If you find this useful, feel free to ⭐ star the repository or share feedback!
 ## ⚖️ License
 
 This project is released under the **MIT License**, meaning it’s open for research, educational, and non-commercial use with proper attribution.
+
+---
+
+**Reference:**  
+Gragert L, Kadatz M, Alcorn J, Stewart D, Chang D, Gill J, Liwski R, Gebel HM, Gill J, Lan JH.  
+*ABO-adjusted calculated panel reactive antibody (cPRA): A unified metric for immunologic compatibility in kidney transplantation.*  
+Am J Transplant. 2022;22(12):3093–3100. doi:[10.1111/ajt.17175](https://doi.org/10.1111/ajt.17175)
 
