@@ -31,3 +31,21 @@ Example request (`POST /calc_cpra`):
   "antigenos": ["A2", "B44", "DR7"],
   "abo": "A"
 }
+
+---
+
+## 👨‍💻 About
+
+Developed and maintained by **Manuel Quirno Costa**  
+Oxford 🇬🇧 · originally from Argentina 🇦🇷 · 2025
+
+This project is part of an ongoing effort to adapt the calculated Panel Reactive Antibody (cPRA) model to local donor data using open-source tools.
+
+If you find this useful, feel free to ⭐ star the repository or share feedback!
+
+---
+
+## ⚖️ License
+
+This project is released under the **MIT License**, meaning it’s open for research, educational, and non-commercial use with proper attribution.
+
