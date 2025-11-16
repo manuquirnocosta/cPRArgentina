@@ -32,7 +32,9 @@ The `/calc_cpra` endpoint calculates the percentage of incompatible donors for a
   "abo": "A"
 } 
 ```
+
 ---
+
 🧮 ABO-adjusted cPRA model
 
 The ABO-adjusted calculated Panel Reactive Antibody (cPRA) value is computed according to the methodology proposed by Gragert et al. (Am J Transplant, 2022).
@@ -54,6 +56,8 @@ For a candidate with cPRA_HLA = 50% and f_ABO-incompatible = 0.40,
 the adjusted value is:
 cPRA_ABOadj = 50% + (1 − 0.5) × 0.40 = 70%
 
+---
+
 👨‍💻 About
 
 Developed and maintained by Manuel Quirno Costa
@@ -63,9 +67,13 @@ This project is part of an ongoing effort to adapt the calculated Panel Reactive
 
 If you find this useful, feel free to ⭐ star the repository or share feedback!
 
+---
+
 ⚖️ License
 
 This project is released under the MIT License, meaning it’s open for research, educational, and non-commercial use with proper attribution.
+
+---
 
 Reference:
 Gragert L, Kadatz M, Alcorn J, Stewart D, Chang D, Gill J, Liwski R, Gebel HM, Gill J, Lan JH.
