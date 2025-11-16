@@ -30,7 +30,7 @@ The `/calc_cpra` endpoint calculates the percentage of incompatible donors for a
 {
   "antigenos": ["A2", "B44", "DR7"],
   "abo": "A"
-}
+} ```
 
 ---
 🧮 ABO-adjusted cPRA model
