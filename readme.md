@@ -40,9 +40,8 @@ This approach integrates both HLA-incompatibility and the probability of ABO-inc
 
 The adjusted cPRA is calculated as:
 
-\[
-cPRA_{ABOadj} = cPRA_{HLA} + (1 - cPRA_{HLA}) \times f_{ABO-incompatible}
-\]
+**Formula:**  
+`cPRA_ABOadj = cPRA_HLA + (1 - cPRA_HLA) × f_ABO-incompatible`
 
 where:
 
