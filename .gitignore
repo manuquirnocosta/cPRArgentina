@@ -1,0 +1,10 @@
+# No subir archivos de base de datos o sensibles
+main_mysql.py
+*.db
+*.sqlite
+*.env
+
+# Archivos de sistema
+__pycache__/
+.vscode/
+.DS_Store
