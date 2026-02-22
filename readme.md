@@ -56,7 +56,7 @@ f_ABO-incompatible is the summed phenotype frequency of ABO-incompatible donors 
 
 The empirical (filter) mode directly computes:
 
-(# donors incompatible by HLA OR ABO) / total donors
+(# donors incompatible by HLA, ABO, or both) / total donors
 
 This dual implementation allows methodological comparison and transparency.
 
