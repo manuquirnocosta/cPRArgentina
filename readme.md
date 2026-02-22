@@ -1,4 +1,5 @@
 <p align="center"> <img src="https://img.shields.io/badge/Python-3.11%2B-blue?logo=python" alt="Python"> <img src="https://img.shields.io/badge/FastAPI-Backend-green?logo=fastapi" alt="FastAPI"> <img src="https://img.shields.io/badge/Frontend-HTML%2FCSS%2FJS-orange?logo=html5" alt="Frontend"> <img src="https://img.shields.io/badge/Data-SQLite-blueviolet?logo=sqlite" alt="SQLite"> <img src="https://img.shields.io/badge/Version-v1.0-brightgreen" alt="Version"> <img src="https://img.shields.io/badge/License-MIT-lightblue" alt="License"> </p>
+
 🧬 cPRArgentina – v1.0
 
 ABO-adjusted cPRA calculator based on Argentine donor data.
@@ -36,6 +37,7 @@ Example response
   "mode_used": "FREQ",
   "last_update": "2026-02-22 18:12:03"
 }
+
 🧮 Methodology
 
 The ABO-adjusted cPRA follows the approach described by:
