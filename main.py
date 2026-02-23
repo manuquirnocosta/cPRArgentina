@@ -6,7 +6,12 @@ from contextlib import asynccontextmanager
 from datetime import datetime
 import pandas as pd
 import sqlite3
+import os
 
+# Base por defecto: demo
+DB_NAME = os.getenv("CPRA_DB", "cpra_demo.db")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, DB_NAME)
 
 # =========================
 # 🔄 Función reutilizable de carga
@@ -15,7 +20,7 @@ import sqlite3
 def load_data_from_db(app: FastAPI):
     """Cargar datos desde SQLite y actualizar app.state"""
 
-    conn = sqlite3.connect("cpra.db")
+    conn = sqlite3.connect(DB_PATH)
     df_local = pd.read_sql_query("SELECT * FROM donors", conn)
     conn.close()
 

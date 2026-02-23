@@ -88,6 +88,19 @@ Interactive API documentation:
 
 http://127.0.0.1:8000/docs
 
+Demo Database
+
+A small synthetic demo database can be generated for testing purposes:
+
+python init_demo_db.py
+
+By default, the application uses cpra_demo.db.
+
+To use a real database instead:
+
+set CPRA_DB=cpra.db
+uvicorn main:app --reload
+
 ⚠️ Disclaimer
 
 Research Use Only.
