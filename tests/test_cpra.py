@@ -79,3 +79,28 @@ def test_agregar_antigeno_no_disminuye_cpra():
 
         # Agregar antígenos no debería bajar el cPRA
         assert cpra2 >= cpra1
+
+# abo validation test
+def test_abo_invalido_rechazado():
+    with TestClient(app) as client:
+        response = client.post(
+            "/calc_cpra",
+            json={
+                "antigenos": ["A2"],
+                "abo": "X"
+            }
+        )
+        assert response.status_code == 422
+
+# mode validation test
+def test_mode_invalido_rechazado():
+    with TestClient(app) as client:
+        response = client.post(
+            "/calc_cpra",
+            json={
+                "antigenos": ["A2"],
+                "abo": "A",
+                "mode": "banana"
+            }
+        )
+        assert response.status_code == 422
