@@ -271,7 +271,9 @@
           resultadoDiv.innerHTML =
             "<div class='resultado-numero'>" + data.cPRA.toFixed(1) + "%</div>" +
             "<div class='resultado-meta'>" +
-            "Método utilizado: " + data.mode_used.toLowerCase() + "<br>" 
+            "Método utilizado: " + data.mode_used.toLowerCase() + "<br>" +
+            "Donantes analizados: " + data.N_donors + "<br>" +
+            "Actualización de base: " + data.last_update +
             "</div>";
         } else {
           resultadoDiv.innerHTML =

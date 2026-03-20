@@ -1,81 +1,97 @@
-import sys
 import os
+import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from fastapi.testclient import TestClient
-from main import app
+from fastapi import HTTPException
+
+from main import (
+    InputData,
+    app,
+    calc_cpra,
+    dataset_info,
+    get_hla_columns,
+    load_data_from_db,
+    reference_data,
+)
+
+
+load_data_from_db(app)
 
 
 def test_cpra_valido():
-    with TestClient(app) as client:
-        response = client.post(
-            "/calc_cpra",
-            json={
-                "antigenos": ["A2"],
-                "abo": "A"
-            }
-        )
+    response = calc_cpra(InputData(antigenos=["A2"], abo="A"))
 
-        assert response.status_code == 200
-        data = response.json()
-        assert "cPRA" in data
-        assert isinstance(data["cPRA"], float)
+    assert "cPRA" in response
+    assert isinstance(response["cPRA"], float)
 
 
 def test_cpra_invalido():
-    with TestClient(app) as client:
-        response = client.post(
-            "/calc_cpra",
-            json={
-                "antigenos": ["BANANA"],
-                "abo": "A"
-            }
-        )
+    try:
+        calc_cpra(InputData(antigenos=["BANANA"], abo="A"))
+        assert False, "Se esperaba HTTPException"
+    except HTTPException as exc:
+        assert exc.status_code == 400
 
-        assert response.status_code == 400
 
 def test_cpra_entre_0_y_100():
-    with TestClient(app) as client:
-        response = client.post(
-            "/calc_cpra",
-            json={
-                "antigenos": ["A2"],
-                "abo": "A"
-            }
-        )
+    data = calc_cpra(InputData(antigenos=["A2"], abo="A"))
 
-        assert response.status_code == 200
-        data = response.json()
-
-        assert 0 <= data["cPRA"] <= 100
+    assert 0 <= data["cPRA"] <= 100
 
 
 def test_agregar_antigeno_no_disminuye_cpra():
-    with TestClient(app) as client:
-        # cPRA con un antígeno
-        r1 = client.post(
-            "/calc_cpra",
-            json={
-                "antigenos": ["A2"],
-                "abo": "A"
-            }
-        )
+    r1 = calc_cpra(InputData(antigenos=["A2"], abo="A"))
+    r2 = calc_cpra(InputData(antigenos=["A2", "B44"], abo="A"))
 
-        # cPRA con dos antígenos
-        r2 = client.post(
-            "/calc_cpra",
-            json={
-                "antigenos": ["A2", "B44"],
-                "abo": "A"
-            }
-        )
+    assert r2["cPRA"] >= r1["cPRA"]
 
-        assert r1.status_code == 200
-        assert r2.status_code == 200
 
-        cpra1 = r1.json()["cPRA"]
-        cpra2 = r2.json()["cPRA"]
+def test_mode_invalido_retorna_400():
+    try:
+        calc_cpra(InputData(antigenos=["A2"], abo="A", mode="banana"))
+        assert False, "Se esperaba HTTPException"
+    except HTTPException as exc:
+        assert exc.status_code == 400
 
-        # Agregar antígenos no debería bajar el cPRA
-        assert cpra2 >= cpra1
+
+def test_abo_invalido_retorna_400():
+    try:
+        calc_cpra(InputData(antigenos=["A2"], abo="X", mode="freq"))
+        assert False, "Se esperaba HTTPException"
+    except HTTPException as exc:
+        assert exc.status_code == 400
+
+
+def test_dataset_info_expone_metadata_hla():
+    info = dataset_info()
+
+    assert info["total_donors"] > 0
+    assert "A1" in info["hla_columns"]
+    assert "sexo" not in info["hla_columns"]
+    assert info["valid_antigen_count"] > 0
+
+
+def test_reference_data_no_expone_columnas_no_hla():
+    data = reference_data()
+
+    assert "A2" in data["valid_antigens"]
+    assert "M" not in data["valid_antigens"]
+    assert "sexo" not in data["hla_columns"]
+
+
+def test_get_hla_columns_excluye_metadatos():
+    columns = [
+        "donor_id",
+        "sexo",
+        "edad",
+        "fecha_operativo",
+        "A1",
+        "A2",
+        "B1",
+        "DQB1_1",
+        "abo",
+        "rh",
+    ]
+
+    assert get_hla_columns(columns) == ["A1", "A2", "B1", "DQB1_1"]
