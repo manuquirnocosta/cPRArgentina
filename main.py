@@ -10,11 +10,18 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 
+from init_demo_db import create_demo_db
+
 # Base por defecto: demo
 DB_NAME = os.getenv("CPRA_DB", "cpra_demo.db")
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, DB_NAME)
 FRONTEND_PATH = os.path.join(BASE_DIR, "frontend", "index.html")
+CORS_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv("CPRA_CORS_ORIGINS", "*").split(",")
+    if origin.strip()
+]
 VALID_ABO_GROUPS = {"A", "B", "AB", "O"}
 VALID_MODES = {"freq", "filter"}
 HLA_COLS = ["A1", "A2", "B1", "B2", "DRB1_1", "DRB1_2", "DQB1_1", "DQB1_2"]
@@ -56,6 +63,9 @@ def get_hla_columns(columns: list[str]) -> list[str]:
 # =========================
 def load_data_from_db(app: FastAPI):
     """Cargar datos desde SQLite y actualizar app.state."""
+    if DB_NAME == "cpra_demo.db" and not os.path.exists(DB_PATH):
+        create_demo_db(DB_PATH)
+
     with sqlite3.connect(DB_PATH) as conn:
         conn.execute(DONORS_TABLE_SQL)
         df_local = pd.read_sql_query("SELECT * FROM donors", conn)
@@ -101,7 +111,7 @@ app = FastAPI(lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -129,6 +139,12 @@ def calc_cpra(data: InputData):
 
     if df_local.empty:
         return {"cPRA": 0.0}
+
+    if not columnas_hla:
+        raise HTTPException(
+            status_code=500,
+            detail="La base no contiene columnas HLA configuradas.",
+        )
 
     antigenos = [a.strip().upper() for a in data.antigenos if a and a.strip()]
     abo = data.abo.upper()
@@ -172,6 +188,15 @@ def calc_cpra(data: InputData):
 def reload_db():
     load_data_from_db(app)
     return {"status": "Base recargada correctamente"}
+
+
+@app.get("/health")
+def health():
+    return {
+        "status": "ok",
+        "database": os.path.basename(getattr(app.state, "db_path", DB_PATH)),
+        "total_donors": getattr(app.state, "total_donors", 0),
+    }
 
 
 # =========================

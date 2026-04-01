@@ -75,6 +75,14 @@ def test_mode_invalido_rechazado():
     assert response.status_code == 422
 
 
+def test_health_endpoint_responde_ok():
+    with TestClient(app) as client:
+        response = client.get("/health")
+
+    assert response.status_code == 200
+    assert response.json()["status"] == "ok"
+
+
 def test_dataset_info_expone_metadata_hla():
     info = dataset_info()
 
