@@ -4,6 +4,12 @@ ABO-adjusted cPRA calculator based on Argentine donor data.
 
 This project is a small FastAPI web app with a built-in HTML frontend. A user can enter unacceptable HLA antigens and an ABO blood group, and the app returns an estimated cPRA based on a local SQLite donor dataset.
 
+## License
+
+This repository is shared under a custom non-commercial license. Research,
+educational, and academic use are allowed. Commercial use is not allowed
+without prior written permission. See [LICENSE](LICENSE).
+
 ## Current scope
 
 - Prototype for research and validation
